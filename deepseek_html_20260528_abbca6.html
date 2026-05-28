@@ -1,0 +1,925 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GRD STUDIO — Графический Дизайн | ИП Кондаков С.В.</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Montserrat:wght@200;300;400;500&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --black: #0a0a0a;
+    --white: #f5f4f0;
+    --gray: #888;
+    --accent: #c8b89a;
+    --border-light: rgba(255,255,255,0.06);
+    --border-medium: rgba(255,255,255,0.1);
+    --bg-card: rgba(255,255,255,0.03);
+    --font-display: 'Bebas Neue', sans-serif;
+    --font-body: 'Montserrat', sans-serif;
+    --font-mono: 'Space Mono', monospace;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--black);
+    color: var(--white);
+    font-family: var(--font-body);
+    font-weight: 300;
+    overflow-x: hidden;
+    line-height: 1.5;
+  }
+
+  ::selection { background: var(--white); color: var(--black); }
+
+  .nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 20px 40px;
+    background: rgba(10,10,10,0.95);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid var(--border-light);
+  }
+  .nav-logo {
+    font-family: var(--font-display);
+    font-size: 22px; letter-spacing: 0.3em;
+    color: var(--white); text-decoration: none;
+  }
+  .nav-logo em { color: var(--accent); font-style: normal; }
+  .nav-links { display: flex; gap: 30px; list-style: none; }
+  .nav-links a {
+    font-family: var(--font-body);
+    font-size: 10px; font-weight: 400;
+    letter-spacing: 0.2em; text-transform: uppercase;
+    color: var(--white); text-decoration: none;
+    transition: opacity 0.3s;
+  }
+  .nav-links a:hover { opacity: 0.5; }
+  .nav-btn {
+    font-family: var(--font-mono); font-size: 9px;
+    letter-spacing: 0.15em; text-transform: uppercase;
+    background: var(--white); color: var(--black);
+    border: none; padding: 10px 24px; cursor: pointer;
+    transition: all 0.3s;
+  }
+  .nav-btn:hover { background: var(--black); color: var(--white); outline: 1px solid var(--white); }
+
+  .section {
+    padding: 100px 40px;
+    background: var(--black);
+  }
+  .section-alt { background: #0e0e0e; }
+
+  .section-label {
+    font-family: var(--font-mono); font-size: 10px;
+    letter-spacing: 0.3em; text-transform: uppercase;
+    color: var(--accent); margin-bottom: 50px;
+    display: flex; align-items: center; gap: 20px;
+  }
+  .section-label::after {
+    content: ''; flex: 1; height: 1px;
+    background: var(--border-medium);
+  }
+  .section-title {
+    font-family: var(--font-display);
+    font-size: clamp(40px, 8vw, 90px);
+    line-height: 0.9; letter-spacing: 0.02em;
+    margin-bottom: 60px;
+  }
+
+  .hero {
+    min-height: 100vh;
+    display: flex; flex-direction: column;
+    justify-content: flex-end;
+    padding: 120px 40px 80px;
+    position: relative;
+    background: var(--black);
+  }
+  .hero-watermark {
+    position: absolute; right: 40px; top: 50%;
+    transform: translateY(-50%);
+    font-family: var(--font-display); font-size: 280px;
+    color: rgba(255,255,255,0.02); pointer-events: none;
+    line-height: 1; user-select: none;
+  }
+  .hero-eyebrow {
+    font-family: var(--font-mono); font-size: 10px;
+    letter-spacing: 0.3em; text-transform: uppercase;
+    color: var(--accent); margin-bottom: 24px;
+  }
+  .hero-title {
+    font-family: var(--font-display);
+    font-size: clamp(64px, 12vw, 180px);
+    line-height: 0.85; letter-spacing: -0.01em;
+  }
+  .hero-title em { font-style: normal; color: var(--accent); }
+  .hero-bottom {
+    margin-top: 40px;
+    display: flex; align-items: flex-end;
+    justify-content: space-between;
+    flex-wrap: wrap; gap: 24px;
+  }
+  .hero-desc {
+    font-size: 12px; font-weight: 300; line-height: 1.8;
+    color: var(--gray); max-width: 360px;
+  }
+
+  .marquee-wrap {
+    overflow: hidden;
+    border-top: 1px solid var(--border-light);
+    border-bottom: 1px solid var(--border-light);
+    padding: 16px 0;
+    background: var(--black);
+  }
+  .marquee {
+    display: flex; white-space: nowrap; gap: 60px;
+    animation: marquee 25s linear infinite;
+  }
+  .marquee span {
+    font-family: var(--font-display); font-size: 12px;
+    letter-spacing: 0.25em; color: var(--gray);
+    text-transform: uppercase; flex-shrink: 0;
+  }
+  .marquee .dot { color: var(--accent); }
+  @keyframes marquee {
+    from { transform: translateX(0); }
+    to { transform: translateX(-50%); }
+  }
+
+  .services-grid {
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px;
+  }
+  .service-card {
+    background: var(--bg-card);
+    padding: 40px 30px;
+    border: 1px solid var(--border-light);
+    transition: background 0.3s;
+    position: relative; overflow: hidden;
+  }
+  .service-card:hover { background: rgba(255,255,255,0.06); }
+  .service-card::before {
+    content: ''; position: absolute; left: 0; top: 0;
+    width: 2px; height: 0; background: var(--accent);
+    transition: height 0.4s;
+  }
+  .service-card:hover::before { height: 100%; }
+  .service-num {
+    font-family: var(--font-mono); font-size: 9px;
+    color: var(--gray); margin-bottom: 28px; letter-spacing: 0.2em;
+  }
+  .service-name {
+    font-family: var(--font-display); font-size: 28px;
+    letter-spacing: 0.05em; margin-bottom: 12px; line-height: 1.1;
+  }
+  .service-desc {
+    font-size: 11px; font-weight: 300; line-height: 1.8;
+    color: var(--gray); margin-bottom: 24px;
+  }
+  .service-price {
+    font-family: var(--font-mono); font-size: 12px;
+    color: var(--white); letter-spacing: 0.1em;
+  }
+  .service-price span { color: var(--accent); font-size: 18px; }
+  .service-btn {
+    margin-top: 20px; width: 100%;
+    background: transparent; border: 1px solid rgba(255,255,255,0.15);
+    color: var(--white); padding: 12px;
+    font-family: var(--font-mono); font-size: 9px;
+    letter-spacing: 0.15em; text-transform: uppercase;
+    cursor: pointer; transition: all 0.3s;
+  }
+  .service-btn:hover { border-color: var(--accent); }
+  .service-btn.selected {
+    background: var(--accent); color: var(--black);
+    border-color: var(--accent); font-weight: 700;
+  }
+
+  .pricing-tabs {
+    display: flex; gap: 0; margin-bottom: 40px;
+    border-bottom: 1px solid var(--border-light);
+  }
+  .ptab {
+    font-family: var(--font-mono); font-size: 10px;
+    letter-spacing: 0.2em; text-transform: uppercase;
+    color: var(--gray); background: transparent; border: none;
+    padding: 14px 28px; cursor: pointer;
+    position: relative; transition: color 0.3s;
+  }
+  .ptab::after {
+    content: ''; position: absolute; bottom: -1px; left: 0; right: 0;
+    height: 2px; background: var(--accent); transform: scaleX(0);
+    transition: transform 0.3s;
+  }
+  .ptab.active { color: var(--white); }
+  .ptab.active::after { transform: scaleX(1); }
+
+  .pricing-panels { position: relative; }
+  .pricing-panel { display: none; }
+  .pricing-panel.active {
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px;
+  }
+
+  .tier {
+    background: var(--bg-card);
+    padding: 40px 30px;
+    border: 1px solid var(--border-light);
+    position: relative;
+  }
+  .tier.featured {
+    background: var(--white); color: var(--black);
+    border-color: var(--white);
+  }
+  .tier-badge {
+    position: absolute; top: 20px; right: 20px;
+    font-family: var(--font-mono); font-size: 8px;
+    letter-spacing: 0.15em; text-transform: uppercase;
+    background: var(--black); color: var(--white);
+    padding: 4px 10px;
+  }
+  .tier-label {
+    font-family: var(--font-mono); font-size: 9px;
+    letter-spacing: 0.25em; text-transform: uppercase;
+    color: var(--accent); margin-bottom: 20px;
+  }
+  .tier.featured .tier-label { color: var(--black); }
+  .tier-name {
+    font-family: var(--font-display); font-size: 36px;
+    letter-spacing: 0.05em; margin-bottom: 8px; line-height: 1;
+  }
+  .tier-price {
+    font-family: var(--font-display); font-size: 52px;
+    line-height: 1; color: var(--white); margin-bottom: 24px;
+  }
+  .tier.featured .tier-price { color: var(--black); }
+  .tier-desc {
+    font-size: 11px; font-weight: 300; line-height: 1.7;
+    color: var(--gray); margin-bottom: 24px;
+    border-top: 1px solid var(--border-light);
+    padding-top: 20px;
+  }
+  .tier.featured .tier-desc {
+    border-color: rgba(0,0,0,0.1); color: rgba(0,0,0,0.6);
+  }
+  .tier-features { list-style: none; margin-bottom: 30px; }
+  .tier-features li {
+    font-size: 11px; font-weight: 300; color: var(--gray);
+    padding: 9px 0; border-bottom: 1px solid rgba(255,255,255,0.04);
+    display: flex; align-items: center; gap: 8px;
+  }
+  .tier.featured .tier-features li {
+    border-color: rgba(0,0,0,0.08); color: rgba(0,0,0,0.6);
+  }
+  .tier-features li::before {
+    content: ''; width: 4px; height: 4px;
+    background: var(--accent); border-radius: 50%; flex-shrink: 0;
+  }
+  .tier.featured .tier-features li::before { background: var(--black); }
+  .tier-btn {
+    width: 100%; padding: 14px;
+    background: transparent; border: 1px solid rgba(255,255,255,0.2);
+    color: var(--white);
+    font-family: var(--font-mono); font-size: 9px;
+    letter-spacing: 0.2em; text-transform: uppercase;
+    cursor: pointer; transition: all 0.3s;
+  }
+  .tier.featured .tier-btn {
+    background: var(--black); color: var(--white); border-color: var(--black);
+  }
+  .tier-btn:hover { background: var(--accent); border-color: var(--accent); color: var(--black); }
+
+  .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1px; }
+  .form-full { grid-column: 1 / -1; }
+  .field {
+    background: var(--bg-card);
+    border: 1px solid var(--border-light);
+    padding: 18px 20px 6px;
+    transition: border-color 0.3s;
+  }
+  .field:focus-within { border-color: var(--accent); }
+  .field label {
+    display: block;
+    font-family: var(--font-mono); font-size: 8px;
+    letter-spacing: 0.25em; text-transform: uppercase;
+    color: var(--gray); margin-bottom: 8px;
+  }
+  .field input, .field select, .field textarea {
+    width: 100%; background: transparent; border: none; outline: none;
+    color: var(--white); font-family: var(--font-body);
+    font-size: 13px; font-weight: 300; padding: 8px 0;
+    letter-spacing: 0.05em; resize: vertical;
+  }
+  .field select {
+    appearance: none; -webkit-appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23c8b89a' stroke-width='1'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 0 center;
+    cursor: pointer;
+  }
+  .field textarea { min-height: 100px; }
+  
+  .budget-grid {
+    display: grid; grid-template-columns: repeat(4, 1fr);
+    gap: 1px; margin: 1px 0;
+  }
+  .budget-opt {
+    padding: 14px; text-align: center;
+    background: var(--bg-card);
+    border: 1px solid var(--border-light);
+    font-family: var(--font-mono); font-size: 9px;
+    letter-spacing: 0.1em; color: var(--gray);
+    cursor: pointer; transition: all 0.3s;
+    text-transform: uppercase;
+  }
+  .budget-opt:hover, .budget-opt.active {
+    background: rgba(200,184,154,0.1);
+    border-color: var(--accent);
+    color: var(--white);
+  }
+  
+  .submit-btn {
+    width: 100%; padding: 20px;
+    background: var(--white); color: var(--black);
+    border: none; font-family: var(--font-display);
+    font-size: 18px; letter-spacing: 0.2em;
+    text-transform: uppercase; cursor: pointer;
+    transition: all 0.3s; margin-top: 1px;
+  }
+  .submit-btn:hover { background: var(--accent); }
+  .submit-btn:disabled {
+    opacity: 0.5; cursor: not-allowed;
+  }
+
+  .selected-display {
+    background: rgba(200,184,154,0.08);
+    border: 1px solid rgba(200,184,154,0.2);
+    padding: 14px 20px; margin-bottom: 1px;
+    font-family: var(--font-mono); font-size: 9px;
+    letter-spacing: 0.15em; color: var(--accent);
+  }
+  .selected-display span { color: var(--white); }
+  
+  .success-msg {
+    display: none; text-align: center; padding: 60px;
+    background: rgba(200,184,154,0.05);
+    border: 1px solid rgba(200,184,154,0.2);
+  }
+  .success-msg.show { display: block; }
+  .success-msg h3 {
+    font-family: var(--font-display); font-size: 50px;
+    letter-spacing: 0.05em; margin-bottom: 12px;
+  }
+  .success-msg p { font-size: 12px; color: var(--gray); }
+
+  .bb-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1px; }
+  .bb-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border-light);
+    padding: 35px 30px;
+  }
+  .bb-card-title {
+    font-family: var(--font-mono); font-size: 9px;
+    letter-spacing: 0.3em; text-transform: uppercase;
+    color: var(--accent); margin-bottom: 28px;
+  }
+  .bb-colors { display: flex; gap: 2px; height: 60px; margin-bottom: 16px; }
+  .bb-swatch { flex: 1; position: relative; }
+  .bb-swatch span {
+    position: absolute; bottom: 6px; left: 6px;
+    font-family: var(--font-mono); font-size: 7px;
+    letter-spacing: 0.1em;
+  }
+  .bb-font-sample { margin-bottom: 16px; }
+  .bb-font-sample p {
+    font-family: var(--font-mono); font-size: 8px;
+    letter-spacing: 0.2em; color: var(--gray);
+    text-transform: uppercase; margin-bottom: 6px;
+  }
+  .bb-font-h { font-family: var(--font-display); font-size: 32px; line-height: 1; }
+  .bb-font-b { font-family: var(--font-body); font-size: 12px; font-weight: 300; color: var(--gray); line-height: 1.6; }
+  .bb-font-m { font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.1em; color: var(--accent); }
+  .bb-logo-demo {
+    display: flex; align-items: center; justify-content: center;
+    height: 100px; background: var(--black);
+    border: 1px solid var(--border-light);
+    font-family: var(--font-display); font-size: 40px;
+    letter-spacing: 0.3em; margin-bottom: 12px;
+  }
+  .bb-logo-demo em { color: var(--accent); font-style: normal; }
+  .bb-row {
+    padding: 16px 0; border-bottom: 1px solid rgba(255,255,255,0.04);
+    display: flex; justify-content: space-between; align-items: center;
+  }
+  .bb-row:last-child { border-bottom: none; }
+  .bb-row-name { font-family: var(--font-body); font-size: 12px; font-weight: 400; }
+  .bb-row-val { font-family: var(--font-mono); font-size: 9px; color: var(--accent); letter-spacing: 0.15em; }
+  .bb-full { grid-column: 1 / -1; }
+  .bb-services-list { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; }
+  .bb-svc-item {
+    background: rgba(255,255,255,0.02);
+    border: 1px solid var(--border-light);
+    padding: 24px 20px;
+  }
+  .bb-svc-num { font-family: var(--font-mono); font-size: 8px; color: var(--accent); letter-spacing: 0.2em; margin-bottom: 10px; }
+  .bb-svc-name { font-family: var(--font-display); font-size: 20px; letter-spacing: 0.05em; margin-bottom: 6px; }
+  .bb-svc-range { font-family: var(--font-mono); font-size: 9px; color: var(--gray); }
+
+  .footer {
+    background: var(--black);
+    border-top: 1px solid var(--border-light);
+    padding: 60px 40px 30px;
+  }
+  .footer-grid {
+    display: grid; grid-template-columns: 2fr 1fr 1fr;
+    gap: 60px; margin-bottom: 50px;
+  }
+  .footer-logo {
+    font-family: var(--font-display); font-size: 32px;
+    letter-spacing: 0.2em; margin-bottom: 16px;
+  }
+  .footer-logo em { color: var(--accent); font-style: normal; }
+  .footer-bio {
+    font-size: 12px; font-weight: 300; line-height: 1.9;
+    color: var(--gray); max-width: 360px;
+  }
+  .footer-col h4 {
+    font-family: var(--font-mono); font-size: 9px;
+    letter-spacing: 0.3em; text-transform: uppercase;
+    color: var(--accent); margin-bottom: 20px;
+  }
+  .footer-col a, .footer-col p {
+    display: block; font-size: 12px; font-weight: 300;
+    color: var(--gray); text-decoration: none;
+    margin-bottom: 10px; transition: color 0.3s;
+  }
+  .footer-col a:hover { color: var(--white); }
+  .footer-bottom {
+    display: flex; align-items: center; justify-content: space-between;
+    padding-top: 30px; border-top: 1px solid rgba(255,255,255,0.05);
+    flex-wrap: wrap; gap: 15px;
+  }
+  .footer-copy {
+    font-family: var(--font-mono); font-size: 8px;
+    letter-spacing: 0.2em; color: rgba(255,255,255,0.2);
+    text-transform: uppercase;
+  }
+  .footer-socials { display: flex; gap: 20px; }
+  .footer-social {
+    font-family: var(--font-mono); font-size: 8px;
+    letter-spacing: 0.2em; color: rgba(255,255,255,0.3);
+    text-decoration: none; text-transform: uppercase;
+    transition: color 0.3s;
+  }
+  .footer-social:hover { color: var(--accent); }
+
+  @media(max-width: 900px) {
+    .nav { padding: 16px 20px; }
+    .nav-links { display: none; }
+    .hero { padding: 100px 20px 60px; }
+    .hero-watermark { font-size: 140px; right: 20px; }
+    .section { padding: 60px 20px; }
+    .services-grid,
+    .pricing-panel.active,
+    .form-grid,
+    .bb-grid { grid-template-columns: 1fr; }
+    .budget-grid { grid-template-columns: repeat(2, 1fr); }
+    .bb-services-list { grid-template-columns: 1fr 1fr; }
+    .footer-grid { grid-template-columns: 1fr; gap: 30px; }
+    .footer { padding: 40px 20px 20px; }
+  }
+  @media(max-width: 480px) {
+    .hero-title { font-size: clamp(40px, 14vw, 60px); }
+    .bb-services-list { grid-template-columns: 1fr; }
+    .budget-grid { grid-template-columns: 1fr 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ========== НАВИГАЦИЯ ========== -->
+<nav class="nav">
+  <a href="#" class="nav-logo">GRD<em>.</em></a>
+  <ul class="nav-links">
+    <li><a href="#services">Услуги</a></li>
+    <li><a href="#pricing">Цены</a></li>
+    <li><a href="#brandbook">Бренд-бук</a></li>
+    <li><a href="#request">Контакт</a></li>
+  </ul>
+  <button class="nav-btn" onclick="document.getElementById('request').scrollIntoView({behavior:'smooth'})">Заявка →</button>
+</nav>
+
+<!-- ========== HERO ========== -->
+<section class="hero" id="hero">
+  <div class="hero-watermark">GRD</div>
+  <p class="hero-eyebrow">— Студия графического дизайна · ИП Кондаков С.В. · 2024</p>
+  <h1 class="hero-title">ФОРМА<br>ИМЕЕТ<br><em>ЗНАЧЕНИЕ</em></h1>
+  <div class="hero-bottom">
+    <p class="hero-desc">Логотипы, фирменный стиль, макеты. Дизайн как язык. Минимализм как принцип. Точность как стандарт.</p>
+  </div>
+</section>
+
+<!-- ========== БЕГУЩАЯ СТРОКА ========== -->
+<div class="marquee-wrap">
+  <div class="marquee">
+    <span>Логотип</span><span class="dot">·</span>
+    <span>Фирменный стиль</span><span class="dot">·</span>
+    <span>Макеты</span><span class="dot">·</span>
+    <span>Брендинг</span><span class="dot">·</span>
+    <span>Типографика</span><span class="dot">·</span>
+    <span>Визитки</span><span class="dot">·</span>
+    <span>Упаковка</span><span class="dot">·</span>
+    <span>Логотип</span><span class="dot">·</span>
+    <span>Фирменный стиль</span><span class="dot">·</span>
+    <span>Макеты</span><span class="dot">·</span>
+    <span>Брендинг</span><span class="dot">·</span>
+    <span>Типографика</span><span class="dot">·</span>
+    <span>Визитки</span><span class="dot">·</span>
+    <span>Упаковка</span><span class="dot">·</span>
+  </div>
+</div>
+
+<!-- ========== УСЛУГИ ========== -->
+<section class="section" id="services">
+  <p class="section-label">01 — Услуги</p>
+  <h2 class="section-title">ЧТО МЫ<br>СОЗДАЁМ</h2>
+  <div class="services-grid" id="services-container"></div>
+</section>
+
+<!-- ========== ТАРИФЫ ========== -->
+<section class="section section-alt" id="pricing">
+  <p class="section-label">02 — Оплата и тарифы</p>
+  <h2 class="section-title">ТАРИФЫ<br>И ЦЕНЫ</h2>
+  <div class="pricing-tabs">
+    <button class="ptab active" onclick="switchPricingTab(this,'logo')">Логотип</button>
+    <button class="ptab" onclick="switchPricingTab(this,'brand')">Фирм. стиль</button>
+    <button class="ptab" onclick="switchPricingTab(this,'pack')">Упаковка</button>
+  </div>
+  <div class="pricing-panels" id="pricing-panels"></div>
+</section>
+
+<!-- ========== ФОРМА ========== -->
+<section class="section" id="request">
+  <p class="section-label">03 — Заявка</p>
+  <h2 class="section-title">ОСТАВИТЬ<br>ЗАЯВКУ</h2>
+
+  <div class="selected-display" id="selected-display" style="display:none">
+    ВЫБРАННЫЕ УСЛУГИ: <span id="selected-list"></span>
+  </div>
+
+  <div id="form-wrap">
+    <div class="form-grid">
+      <div class="field">
+        <label>Имя *</label>
+        <input type="text" id="f-name" placeholder="Александр Иванов" required>
+      </div>
+      <div class="field">
+        <label>Компания / Проект</label>
+        <input type="text" id="f-company" placeholder="Название бренда">
+      </div>
+      <div class="field">
+        <label>Email *</label>
+        <input type="email" id="f-email" placeholder="hello@brand.ru" required>
+      </div>
+      <div class="field">
+        <label>Telegram / WhatsApp</label>
+        <input type="text" id="f-phone" placeholder="@username или +7...">
+      </div>
+      <div class="field form-full">
+        <label>Услуга</label>
+        <select id="f-service">
+          <option value="">— Выберите услугу —</option>
+          <option>Логотип (от 2 400 ₽)</option>
+          <option>Фирменный стиль (от 7 500 ₽)</option>
+          <option>Макеты (от 1 500 ₽)</option>
+          <option>Упаковка (от 3 600 ₽)</option>
+          <option>Брендинг (от 12 000 ₽)</option>
+          <option>Соцсети (от 1 800 ₽)</option>
+          <option>Несколько услуг / обсудить</option>
+        </select>
+      </div>
+    </div>
+
+    <p style="font-family:var(--font-mono);font-size:9px;letter-spacing:0.3em;text-transform:uppercase;color:var(--accent);margin:1px 0;padding:12px 0 8px;">Бюджет проекта</p>
+    <div class="budget-grid" id="budget-grid">
+      <div class="budget-opt" onclick="selectBudget(this)">до 5 000 ₽</div>
+      <div class="budget-opt" onclick="selectBudget(this)">5 000–15 000 ₽</div>
+      <div class="budget-opt" onclick="selectBudget(this)">15 000–45 000 ₽</div>
+      <div class="budget-opt" onclick="selectBudget(this)">45 000+ ₽</div>
+    </div>
+
+    <div class="form-grid" style="margin-top:1px">
+      <div class="field form-full">
+        <label>Расскажите о проекте</label>
+        <textarea id="f-msg" placeholder="Что за бизнес, какая цель дизайна, есть ли референсы, сроки..."></textarea>
+      </div>
+    </div>
+
+    <button class="submit-btn" id="submit-btn" onclick="submitForm()">
+      ОТПРАВИТЬ ЗАЯВКУ →
+    </button>
+  </div>
+
+  <div class="success-msg" id="success-msg">
+    <h3>ЗАЯВКА ОТПРАВЛЕНА</h3>
+    <p>Мы уже получили вашу заявку в Telegram.<br>Свяжемся с вами в течение 24 часов.</p>
+    <p style="margin-top:20px;font-size:11px;color:var(--gray);">
+      📧 ip.kondakovsv163@mail.ru<br>
+      📱 +7 (964) 989-39-80
+    </p>
+  </div>
+</section>
+
+<!-- ========== БРЕНД-БУК ========== -->
+<section class="section section-alt" id="brandbook">
+  <p class="section-label">04 — Бренд-бук</p>
+  <h2 class="section-title">GRD<br>BRAND BOOK</h2>
+  <div class="bb-grid">
+    <div class="bb-card">
+      <div class="bb-card-title">01 / Логотип</div>
+      <div class="bb-logo-demo">GRD<em>.</em></div>
+      <div class="bb-row"><span class="bb-row-name">Минимальный размер</span><span class="bb-row-val">24px</span></div>
+      <div class="bb-row"><span class="bb-row-name">Охранная зона</span><span class="bb-row-val">× высота буквы</span></div>
+      <div class="bb-row"><span class="bb-row-name">Нельзя искажать</span><span class="bb-row-val">пропорции</span></div>
+      <div class="bb-row"><span class="bb-row-name">Формат файлов</span><span class="bb-row-val">SVG · AI · PNG</span></div>
+    </div>
+    <div class="bb-card">
+      <div class="bb-card-title">02 / Цвета</div>
+      <div class="bb-colors">
+        <div class="bb-swatch" style="background:#0a0a0a"><span style="color:#f5f4f0">#0a0a0a</span></div>
+        <div class="bb-swatch" style="background:#f5f4f0"><span style="color:#0a0a0a">#f5f4f0</span></div>
+        <div class="bb-swatch" style="background:#c8b89a"><span style="color:#0a0a0a">#c8b89a</span></div>
+        <div class="bb-swatch" style="background:#888"><span style="color:#f5f4f0">#888888</span></div>
+      </div>
+      <div class="bb-row"><span class="bb-row-name">Основной</span><span class="bb-row-val">Charcoal Black</span></div>
+      <div class="bb-row"><span class="bb-row-name">Фон / текст</span><span class="bb-row-val">Off-White</span></div>
+      <div class="bb-row"><span class="bb-row-name">Акцент</span><span class="bb-row-val">Warm Sand</span></div>
+    </div>
+    <div class="bb-card">
+      <div class="bb-card-title">03 / Типографика</div>
+      <div class="bb-font-sample"><p>Display / Заголовки</p><div class="bb-font-h">BEBAS NEUE</div></div>
+      <div class="bb-font-sample"><p>Body / Тело текста</p><div class="bb-font-b">Montserrat Light — для описаний.</div></div>
+      <div class="bb-font-sample"><p>Mono / Метки и цены</p><div class="bb-font-m">SPACE MONO · LABELS</div></div>
+    </div>
+    <div class="bb-card">
+      <div class="bb-card-title">04 / Принципы бренда</div>
+      <div class="bb-row"><span class="bb-row-name">Философия</span><span class="bb-row-val">Less is More</span></div>
+      <div class="bb-row"><span class="bb-row-name">Тон коммуникации</span><span class="bb-row-val">Лаконично · Точно</span></div>
+      <div class="bb-row"><span class="bb-row-name">Эстетика</span><span class="bb-row-val">Bauhaus · Mono</span></div>
+      <div class="bb-row"><span class="bb-row-name">Изображения</span><span class="bb-row-val">Ч/Б · Геометрия</span></div>
+      <div class="bb-row"><span class="bb-row-name">Запрещено</span><span class="bb-row-val">Скругления · Тени</span></div>
+      <div class="bb-row"><span class="bb-row-name">Версия брендбука</span><span class="bb-row-val">v1.0 · 2024</span></div>
+    </div>
+    <div class="bb-card bb-full">
+      <div class="bb-card-title">05 / Прейскурант услуг</div>
+      <div class="bb-services-list" id="bb-services-list"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ========== ФУТЕР ========== -->
+<footer class="footer">
+  <div class="footer-grid">
+    <div>
+      <div class="footer-logo">GRD<em>.</em></div>
+      <p class="footer-bio">GRD Studio — независимая студия графического дизайна. Мы создаём визуальные системы, которые говорят сами за себя.</p>
+      <p class="footer-bio" style="margin-top:12px">
+        <strong>ИП КОНДАКОВ СЕРГЕЙ ВЛАДИМИРОВИЧ</strong><br>
+        ИНН 633009117389
+      </p>
+    </div>
+    <div class="footer-col">
+      <h4>Услуги</h4>
+      <a href="#services">Логотип</a>
+      <a href="#services">Фирменный стиль</a>
+      <a href="#services">Макеты</a>
+      <a href="#services">Упаковка</a>
+      <a href="#services">Брендинг</a>
+      <a href="#services">Соцсети</a>
+    </div>
+    <div class="footer-col">
+      <h4>Контакты</h4>
+      <p>📧 ip.kondakovsv163@mail.ru</p>
+      <p>📱 +7 (964) 989-39-80</p>
+      <p>💬 Telegram: @studiogrd</p>
+      <p style="margin-top:16px;color:rgba(255,255,255,0.2)">ИП Кондаков Сергей Владимирович</p>
+      <p style="color:rgba(255,255,255,0.2)">ИНН 633009117389</p>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p class="footer-copy">© 2024 GRD Studio — ИП Кондаков С.В.</p>
+    <div class="footer-socials">
+      <a href="https://t.me/studiogrd" class="footer-social">Telegram</a>
+      <a href="#" class="footer-social">Instagram</a>
+      <a href="#" class="footer-social">Behance</a>
+    </div>
+  </div>
+</footer>
+
+<!-- ========== СКРИПТЫ ========== -->
+<script>
+// ========== ДАННЫЕ ==========
+const services = [
+  { num: '001', name: 'ЛОГОТИП', desc: 'Разработка уникального знака, словесного знака или комбинированного логотипа. Векторные файлы, все форматы, цветовые варианты.', price: '2 400 ₽' },
+  { num: '002', name: 'ФИРМЕННЫЙ<br>СТИЛЬ', desc: 'Полная айдентика бренда: логотип, цветовая палитра, типографика, шаблоны документов, паттерны, гайдлайн.', price: '7 500 ₽' },
+  { num: '003', name: 'МАКЕТЫ', desc: 'Дизайн полиграфии и цифровых носителей: каталоги, буклеты, лендинги, презентации, баннеры, соцсети.', price: '1 500 ₽' },
+  { num: '004', name: 'УПАКОВКА', desc: 'Дизайн упаковки продукта, этикеток, коробок. Работа с технической документацией, 3D-визуализация.', price: '3 600 ₽' },
+  { num: '005', name: 'БРЕНДИНГ', desc: 'Стратегическое создание бренда с нуля: нейминг, позиционирование, визуальная концепция, tone of voice.', price: '12 000 ₽' },
+  { num: '006', name: 'СОЦСЕТИ', desc: 'Визуальный контент для Instagram, Telegram, VK: шаблоны постов, Stories, обложки, иконки хайлайтс.', price: '1 800 ₽' }
+];
+
+const pricingData = {
+  logo: [
+    { name: 'БАЗОВЫЙ', price: '2 400 ₽', desc: 'Быстрый логотип для стартапа или личного бренда', features: ['3 концепции на выбор', '2 правки', 'Форматы AI, PNG, PDF', 'Срок: 5–7 дней'], badge: null, featured: false },
+    { name: 'СТАНДАРТ', price: '4 500 ₽', desc: 'Полноценный логотип с вариантами для любых носителей', features: ['5 концепций', 'Неограниченные правки', 'Все форматы + SVG', 'Цветовые варианты (4)', 'Гайд по использованию'], badge: 'Популярный', featured: true },
+    { name: 'ПРЕМИУМ', price: '8 400 ₽', desc: 'Логотип со знаком, стратегией и базовым брендбуком', features: ['Бренд-стратегия', 'Авторский знак', 'PDF-брендбук (10 стр.)', 'Анимированная версия', 'Авторский надзор'], badge: null, featured: false }
+  ],
+  brand: [
+    { name: 'СТАРТ', price: '7 500 ₽', desc: 'Базовый пакет для малого бизнеса и стартапов', features: ['Логотип (2 варианта)', 'Цветовая палитра', 'Шрифтовая пара', 'Визитная карточка'], badge: null, featured: false },
+    { name: 'БИЗНЕС', price: '16 500 ₽', desc: 'Полная айдентика: от стратегии до всех носителей', features: ['Полный брендбук (30+ стр.)', 'Все носители (10 шт.)', 'Паттерны / текстуры', 'Соц. сети (шаблоны)', 'Гайдлайн'], badge: 'Лучший выбор', featured: true },
+    { name: 'КОРПОРАТ', price: 'от 36 000 ₽', desc: 'Для компаний с амбициями федерального масштаба', features: ['Бренд-аудит', 'Стратегия бренда', 'Полная система айдентики', 'Сопровождение внедрения', 'Приоритетная поддержка'], badge: null, featured: false }
+  ],
+  pack: [
+    { name: 'ЭТИКЕТКА', price: '3 600 ₽', desc: 'Дизайн этикетки для одного продукта', features: ['Дизайн лицевой + обратной', '2 варианта', 'Исходники'], badge: null, featured: false },
+    { name: 'УПАКОВКА', price: '7 200 ₽', desc: 'Полный дизайн упаковки с разверткой и 3D-визуалом', features: ['Дизайн развёртки', '3D-визуализация', 'Технические файлы', '3 варианта цвета'], badge: 'Хит продаж', featured: true },
+    { name: 'ЛИНЕЙКА', price: 'от 15 000 ₽', desc: 'Дизайн для серии продуктов с единой системой', features: ['До 10 SKU', 'Единая дизайн-система', '3D-рендеры', 'Адаптация для маркетплейсов'], badge: null, featured: false }
+  ]
+};
+
+// ========== TELEGRAM НАСТРОЙКИ (УЖЕ ВСТАВЛЕНЫ) ==========
+const BOT_TOKEN = '8288227815:AAHqayk0u7OpnU9unT-2-a9jZSf1ggh1G-8';
+const CHAT_ID = '6623335808';
+
+// ========== ГЕНЕРАЦИЯ КАРТОЧЕК ==========
+function renderServices() {
+  document.getElementById('services-container').innerHTML = services.map(s => `
+    <div class="service-card">
+      <div class="service-num">${s.num}</div>
+      <h3 class="service-name">${s.name}</h3>
+      <p class="service-desc">${s.desc}</p>
+      <div class="service-price">от <span>${s.price}</span></div>
+      <button class="service-btn" data-service="${s.name.replace(/<br>/g,' ')}" onclick="toggleService(this)">+ Выбрать услугу</button>
+    </div>
+  `).join('');
+}
+
+function renderPricing() {
+  const panels = document.getElementById('pricing-panels');
+  let html = '';
+  for (const [key, tiers] of Object.entries(pricingData)) {
+    const active = key === 'logo' ? ' active' : '';
+    html += `<div class="pricing-panel${active}" id="tab-${key}">`;
+    tiers.forEach(t => {
+      html += `
+        <div class="tier${t.featured ? ' featured' : ''}">
+          ${t.badge ? `<div class="tier-badge">${t.badge}</div>` : ''}
+          <div class="tier-label">Тариф</div>
+          <div class="tier-name">${t.name}</div>
+          <div class="tier-price">${t.price}</div>
+          <p class="tier-desc">${t.desc}</p>
+          <ul class="tier-features">${t.features.map(f => `<li>${f}</li>`).join('')}</ul>
+          <button class="tier-btn" onclick="selectPackage('${t.name}', '${t.price}')">Выбрать →</button>
+        </div>
+      `;
+    });
+    html += '</div>';
+  }
+  panels.innerHTML = html;
+}
+
+function renderBrandBookServices() {
+  const ranges = ['2 400 — 8 400 ₽', '7 500 — 36 000 ₽', 'от 1 500 ₽', '3 600 — 15 000 ₽', 'от 12 000 ₽', '1 800 — 6 000 ₽'];
+  document.getElementById('bb-services-list').innerHTML = services.map((s, i) => `
+    <div class="bb-svc-item">
+      <div class="bb-svc-num">${s.num}</div>
+      <div class="bb-svc-name">${s.name.replace(/<br>/g,' ')}</div>
+      <div class="bb-svc-range">${ranges[i]}</div>
+    </div>
+  `).join('');
+}
+
+// ========== ВЫБОР УСЛУГ ==========
+let selectedServices = [];
+
+function toggleService(btn) {
+  const svc = btn.dataset.service;
+  if (selectedServices.includes(svc)) {
+    selectedServices = selectedServices.filter(s => s !== svc);
+    btn.classList.remove('selected');
+    btn.textContent = '+ Выбрать услугу';
+  } else {
+    selectedServices.push(svc);
+    btn.classList.add('selected');
+    btn.textContent = '✓ Выбрано';
+  }
+  updateSelectedDisplay();
+}
+
+function updateSelectedDisplay() {
+  const disp = document.getElementById('selected-display');
+  const list = document.getElementById('selected-list');
+  if (selectedServices.length > 0) {
+    disp.style.display = 'block';
+    list.textContent = selectedServices.join(' · ');
+  } else {
+    disp.style.display = 'none';
+  }
+}
+
+// ========== ТАБЫ ТАРИФОВ ==========
+function switchPricingTab(btn, tabId) {
+  document.querySelectorAll('.ptab').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.pricing-panel').forEach(p => p.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById('tab-' + tabId).classList.add('active');
+}
+
+function selectPackage(name, price) {
+  document.getElementById('f-msg').value = `Интересует пакет: ${name} — ${price}`;
+  document.getElementById('request').scrollIntoView({ behavior: 'smooth' });
+}
+
+// ========== БЮДЖЕТ ==========
+function selectBudget(el) {
+  document.querySelectorAll('.budget-opt').forEach(b => b.classList.remove('active'));
+  el.classList.add('active');
+}
+
+// ========== ОТПРАВКА В TELEGRAM ==========
+async function submitForm() {
+  const name = document.getElementById('f-name').value.trim();
+  const email = document.getElementById('f-email').value.trim();
+  
+  if (!name || !email) {
+    alert('Пожалуйста, заполните обязательные поля: Имя и Email');
+    return;
+  }
+
+  const btn = document.getElementById('submit-btn');
+  btn.disabled = true;
+  btn.textContent = 'ОТПРАВЛЯЕТСЯ...';
+
+  const company = document.getElementById('f-company').value || 'Не указано';
+  const phone = document.getElementById('f-phone').value || 'Не указано';
+  const service = document.getElementById('f-service').value || 'Не указано';
+  const budget = document.querySelector('.budget-opt.active')?.textContent || 'Не указан';
+  const message = document.getElementById('f-msg').value || 'Не указано';
+  const selected = selectedServices.length > 0 ? selectedServices.join(', ') : 'Не выбраны';
+
+  const text = `
+🔔 <b>НОВАЯ ЗАЯВКА!</b>
+
+👤 <b>Имя:</b> ${name}
+📧 <b>Email:</b> ${email}
+🏢 <b>Компания:</b> ${company}
+📱 <b>Телефон:</b> ${phone}
+🎨 <b>Услуга:</b> ${service}
+💰 <b>Бюджет:</b> ${budget}
+📦 <b>Выбрано:</b> ${selected}
+📝 <b>Сообщение:</b> ${message}
+
+📅 <b>Дата:</b> ${new Date().toLocaleString('ru-RU')}
+  `.trim();
+
+  try {
+    const response = await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        chat_id: CHAT_ID,
+        text: text,
+        parse_mode: 'HTML'
+      })
+    });
+
+    const result = await response.json();
+
+    if (result.ok) {
+      document.getElementById('form-wrap').style.display = 'none';
+      document.getElementById('success-msg').classList.add('show');
+    } else {
+      console.error('Ошибка Telegram:', result);
+      alert('Ошибка отправки. Пожалуйста, напишите нам напрямую:\n📧 ip.kondakovsv163@mail.ru\n📱 +7 (964) 989-39-80');
+    }
+  } catch (error) {
+    console.error('Ошибка:', error);
+    alert('Ошибка соединения. Пожалуйста, напишите нам:\n📧 ip.kondakovsv163@mail.ru\n📱 +7 (964) 989-39-80');
+  } finally {
+    btn.disabled = false;
+    btn.textContent = 'ОТПРАВИТЬ ЗАЯВКУ →';
+  }
+}
+
+// ========== ЗАПУСК ==========
+document.addEventListener('DOMContentLoaded', () => {
+  renderServices();
+  renderPricing();
+  renderBrandBookServices();
+});
+</script>
+
+</body>
+</html>
